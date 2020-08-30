@@ -40,23 +40,43 @@ export default {
     })
     //2.监听滚动的位置,我们不是打印当前组件的位置，而是谁需要用到这个组件，就打印谁
     //所以这里要自定义一个事件，传出去
-    this.scroll.on('scroll', (position) => {
+    if(this.probeType === 2 || this.probeType === 3){
+       this.scroll.on('scroll', (position) => {
       // console.log(position);
       this.$emit('scroll', position)
     })
+    }
+    //3.监听scroll滚到底部
+    if(this.pullUpLoad){
+      this.scroll.on('pullingUp', () => {
+        // console.log('监听到滚动到底部！');
+        this.$emit('pullingUp')
+      })
+    }
+
+    // console.log(this.scroll);
     //3.监听上拉事件
-    this.scroll.on('pullingUp', () => {
-      this.$emit('pullingUp')
-    })
+    // this.scroll.on('pullingUp', () => {
+    //   this.$emit('pullingUp')
+    // })
   },
   methods: {
     scrollTo(x, y, time=300){
-      this.scroll.scrollTo(x, y, time)
+      //先判断一下scroll是否存在，存在才能执行后面的函数
+      this.scroll && this.scroll.scrollTo(x, y, time)
     },
     finishPullUp(){
       this.scroll.finishPullUp()
+    },
+    refresh(){
+      
+      this.scroll && this.scroll.refresh()
+      // console.log('---------');
+   
+    },
+    getScrollY(){
+      return this.scroll ? this.scroll.y : 0
     }
-
   }
 }
 </script>

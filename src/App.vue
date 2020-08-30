@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <router-view/>
+    <!-- 因为每次点击到详情页展示的数据都不一样，所以不能让详情页detail保持活跃状态 -->
+    <keep-alive exclude="Detail">
+      <router-view/>
+    
+    </keep-alive>
     <main-tab-bar/>
   </div>
 </template>
