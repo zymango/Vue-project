@@ -1,5 +1,5 @@
 //因为refresh会调用30次，为了减小服务器的压力，定义一个防抖函数
-export function debounce(func, delay){
+export function debounce(func, delay=50){
   let timer = null;
   return function(...args){
     if(timer) clearTimeout (timer);
