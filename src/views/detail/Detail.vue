@@ -6,9 +6,9 @@
     ref="scroll" 
     :probeType="3" 
     @scroll="contentScroll">
-     <ul>
+     <!-- <ul>
         <li v-for="(item, index) in $store.state.cartList" :key="index">{{item}}</li>
-    </ul>
+    </ul> -->
       <!-- 属性：topImages  传入值：top-imagee -->
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
@@ -22,7 +22,7 @@
        
     </scroll>
     <detail-bottom-bar @addCart="addToCart"></detail-bottom-bar>
-   
+    <!-- <toast :message="message" :show="isShow"></toast> -->
   </div>
 </template>
 
@@ -47,6 +47,7 @@ import Scroll from 'components/common/scroll/Scroll'
  * 导入整个项目的公共组件
  */
 import GoodList from 'components/content/goods/GoodsList'
+// import Toast from 'components/common/toast/Toast'
 
 /**
  * 导入网络请求方法
@@ -76,6 +77,7 @@ export default {
     //注册封装好的框架组件
     Scroll,
     GoodList,
+    // Toast
     
     
   },
@@ -94,6 +96,8 @@ export default {
       themeTopYs:[],
       currentIndex: 0,
       isShowBackTop: false,
+      // message:'',
+      // isShow: false
     }
   },
   created () {
@@ -101,7 +105,7 @@ export default {
     this.iid = this.$route.params.iid
     //2.根据iid请求详情数据
     getDetail(this.iid).then(res => {
-      // console.log(res);
+      console.log(res);
       //(1)获取顶部轮播图片
       const data = res.result;
       this.topImages = data.itemInfo.topImages
@@ -147,7 +151,7 @@ export default {
     })
     //3.请求推荐数据
     getRecommend().then(res => {
-      console.log(res);
+      // console.log(res);
       this.recommends = res.data.list
     })
   },
@@ -252,13 +256,26 @@ export default {
       product.image = this.topImages[0]
       product.title = this.goods.title
       product.desc = this.goods.desc
-      product.price = this.goods.newPrice
+      product.price = this.goods.realPrice
       product.iid = this.iid
+      
       //2.将商品加入购物车里面
       //不能通过这个直接修改数据，必须经过 mutations
       // this.$store.cartList.push(product)
       // this.$store.commit('addCart', product)
-      this.$store.dispatch('addCart', product)
+      
+
+
+      this.$store.dispatch('addCart', product).then(res => {
+        // this.isShow = true
+        // this.message = res
+        // setTimeout(() => {
+        //   this.isShow = false
+        //   this.message = ''
+        // }, 1500);
+        // this.$toast.show(res, 2000)
+        console.log(this.$toast);
+      })
     }
   }
 }
